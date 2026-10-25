@@ -123,6 +123,11 @@
             color: #a7f3d0;
         }
 
+        @media (max-width: 480px) {
+            .term-header { flex-wrap: wrap; gap: 8px; }
+            .term-header-right { flex-wrap: wrap; }
+        }
+
         /* 본문 */
         .term-body {
             padding: 18px 18px 14px;
@@ -442,160 +447,6 @@
                 "Courier New", monospace;
         }
 
-        /* ===== Server Support Bar ===== */
-        .support-bar {
-            margin: 10px 18px 0;
-        }
-
-        .support-bar-inner {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 16px;
-            padding: 12px 14px;
-            border-radius: 14px;
-            background: #020617;
-            border: 1px solid #111827;
-        }
-
-        .support-title {
-            font-size: 13px;
-            font-weight: 500;
-            color: #e5e7eb;
-        }
-
-        .support-sub {
-            margin-top: 4px;
-            font-size: 12px;
-            color: #9ca3af;
-        }
-
-        .support-btn {
-            background: #22c55e;
-            color: #ffffff;
-            border: none;
-            border-radius: 999px;
-            padding: 8px 16px;
-            font-size: 12px;
-            font-weight: 600;
-            cursor: pointer;
-            white-space: nowrap;
-            box-shadow:
-                0 0 0 1px rgba(34, 197, 94, 0.4),
-                0 10px 25px rgba(0, 0, 0, 0.8);
-        }
-
-        @media (max-width: 640px) {
-            .support-bar-inner {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-        }
-
-        /* ===== 후원 모달 ===== */
-        .support-modal-backdrop {
-            position: fixed;
-            inset: 0;
-            background: rgba(15, 23, 42, 0.75);
-            display: none;
-            align-items: center;
-            justify-content: center;
-            z-index: 50;
-        }
-
-        .support-modal-backdrop.is-open {
-            display: flex;
-        }
-
-        .support-modal {
-            width: min(420px, 90vw);
-            background: #020617;
-            border-radius: 18px;
-            padding: 18px 18px 16px;
-            border: 1px solid #1f2937;
-            box-shadow:
-                0 24px 60px rgba(0, 0, 0, 0.85),
-                0 0 0 1px rgba(15, 23, 42, 0.7);
-        }
-
-        .support-modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 8px;
-            margin-bottom: 8px;
-        }
-
-        .support-modal-title {
-            font-size: 15px;
-            font-weight: 600;
-        }
-
-        .support-modal-close {
-            background: transparent;
-            border: none;
-            color: #9ca3af;
-            padding: 4px;
-            border-radius: 999px;
-            cursor: pointer;
-            font-size: 16px;
-            line-height: 1;
-        }
-
-        .support-modal-close:hover {
-            background: rgba(31, 41, 55, 0.7);
-            color: #e5e7eb;
-        }
-
-        .support-modal-body {
-            font-size: 13px;
-            color: #d1d5db;
-        }
-
-        .support-modal-body p {
-            margin: 4px 0 6px;
-        }
-
-        .support-modal-body strong {
-            font-weight: 600;
-        }
-
-        .support-qr-wrapper {
-            margin: 10px auto 6px;
-            padding: 10px;
-            border-radius: 14px;
-            background: #020617;
-            border: 1px dashed #374151;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .support-qr-wrapper img {
-            max-width: 220px;
-            width: 100%;
-            height: auto;
-            border-radius: 8px;
-            background: #ffffff;
-        }
-
-        .support-modal-hint {
-            font-size: 11px;
-            color: #9ca3af;
-            margin-top: 6px;
-            line-height: 1.5;
-        }
-
-        .support-modal-footer {
-            display: flex;
-            justify-content: flex-end;
-            margin-top: 10px;
-        }
-
-        .support-modal-footer button {
-            font-size: 12px;
-            padding-inline: 14px;
-        }
     </style>
     <!-- Cloudflare Web Analytics -->
     <script defer src='https://static.cloudflareinsights.com/beacon.min.js'
@@ -616,7 +467,7 @@
             </div>
             <div class="term-header-right">
                 <span><span class="term-stat-label">CONF</span> <span class="term-stat-value">95%</span></span>
-                <span><span class="term-stat-label">MODEL</span> <span class="term-stat-value">z-test +
+                <span><span class="term-stat-label">MODEL</span> <span class="term-stat-value">z/Fisher +
                         Bayes</span></span>
             </div>
         </div>
@@ -638,7 +489,7 @@
                         <div class="card-title">데이터 입력</div>
                     </div>
                     <p class="muted">
-                        각 안의 방문자 수와 전환 수(구매·가입 등)를 입력하세요. 데이터는 95% 신뢰수준 기준으로 분석됩니다.
+                        각 안의 방문자 수와 전환한 방문자 수(구매·가입 등)를 입력하세요. 한 방문자의 전환은 최대 1건으로 집계하며, 방문자 수는 각 안당 최대 10억 명까지 지원합니다.
                     </p>
 
                     <div class="variant-grid">
@@ -649,11 +500,11 @@
                             </div>
                             <div class="field-block">
                                 <label for="aVisitors">A 방문자 수</label>
-                                <input id="aVisitors" type="number" min="0" step="1" placeholder="예: 10,000" />
+                                <input id="aVisitors" type="number" min="1" max="1000000000" step="1" placeholder="예: 10000" />
                             </div>
                             <div class="field-block">
                                 <label for="aConversions">A 전환 수</label>
-                                <input id="aConversions" type="number" min="0" step="1" placeholder="예: 500" />
+                                <input id="aConversions" type="number" min="0" max="1000000000" step="1" placeholder="예: 500" />
                             </div>
                         </div>
 
@@ -664,11 +515,11 @@
                             </div>
                             <div class="field-block">
                                 <label for="bVisitors">B 방문자 수</label>
-                                <input id="bVisitors" type="number" min="0" step="1" placeholder="예: 9,500" />
+                                <input id="bVisitors" type="number" min="1" max="1000000000" step="1" placeholder="예: 9500" />
                             </div>
                             <div class="field-block">
                                 <label for="bConversions">B 전환 수</label>
-                                <input id="bConversions" type="number" min="0" step="1" placeholder="예: 530" />
+                                <input id="bConversions" type="number" min="0" max="1000000000" step="1" placeholder="예: 530" />
                             </div>
                         </div>
                     </div>
@@ -680,7 +531,7 @@
                         <button type="button" class="btn-secondary" onclick="resetAll()">
                             입력 초기화
                         </button>
-                        <div id="error" class="error"></div>
+                        <div id="error" class="error" role="alert"></div>
                     </div>
                 </div>
 
@@ -689,7 +540,7 @@
                     <div class="card-header-line">
                         <div class="card-title">상세 결과</div>
                         <div class="chip-row">
-                            <span class="pill-badge badge-freq">Z-TEST</span>
+                            <span class="pill-badge badge-freq">Z / FISHER</span>
                             <span class="pill-badge badge-bayes">BAYESIAN</span>
                         </div>
                     </div>
@@ -697,14 +548,14 @@
                     <div class="result-block">
                         <p><strong>1. 기본 지표 요약</strong></p>
                         <div id="basicResult">
-                            <p class="muted">전환율, 차이(percentage point), 상대 상승률을 보여줍니다.</p>
+                            <p class="muted">전환율, 절대 차이(pp), 관측 상대 상승률을 보여줍니다.</p>
                         </div>
                     </div>
 
                     <div class="result-block">
-                        <p><strong>2. Z-TEST 결과</strong></p>
+                        <p><strong>2. 통계 검정 결과</strong></p>
                         <div id="ztestResult">
-                            <p class="muted">p-value 기준으로 결과의 차이가 우연일 가능성을 계산해 통계적으로 의미 있는 차이인지 보여줍니다.</p>
+                            <p class="muted">양측 두 비율 z-test를 사용하며, 기대 빈도가 5 미만인 셀이 있으면 Fisher 정확검정을 사용합니다.</p>
                         </div>
                     </div>
 
@@ -712,20 +563,19 @@
                         <p><strong>3. 베이지안 관점 결과</strong></p>
                         <div id="bayesResult">
                             <p class="muted">
-                                B안이 A안보다 전환율이 높을 가능성을 %로 보여주고, 그때 기대되는 전환율 상승 폭(uplift)을 함께 보여줍니다.<br />
-                                예: “B가 더 좋을 확률 80%”라면, 비슷한 실험을 10번 했을 때 8번 정도는 B가 더 잘 나올 것이라는 의미입니다.
+                                독립적인 Beta(1,1) 사전분포를 사용합니다. 데이터와 이 모형을 조건으로 B의 실제 전환율이 A보다 높을 사후확률 및 각 안의 95% 사후구간을 보여줍니다.
                             </p>
                         </div>
                     </div>
 
                     <div class="result-note">
-                        ※ 이 결과는 의사결정 참고용이며, 실제 의사결정은 비즈니스 임팩트·리스크 등 다양한 요소를 함께 고려하는 것이 좋습니다.
+                        ※ 서로 독립적인 방문자를 무작위 배정하고, 정해진 표본·기간에 한 번 분석하는 실험을 가정합니다. 반복적인 중간 확인이나 여러 안의 동시 비교에 대한 보정은 포함하지 않습니다. 채택 여부는 효과의 크기와 비즈니스 비용도 함께 고려하세요.
                     </div>
                 </div>
             </div>
 
             <!-- 요약 결과 -->
-            <div id="summary" class="summary-box summary-default">
+            <div id="summary" class="summary-box summary-default" aria-live="polite">
                 <p class="summary-title">요약 결과</p>
                 <p>A/B TEST 데이터를 입력하면, 여기에 통계적 관점의 한 줄 결론이 나타납니다.</p>
                 <p style="font-size:12px; color:#9ca3af;">예: “B안의 전환율이 A안보다 6.5% 높고, 통계적으로 의미 있는 차이입니다. → B안 채택
@@ -739,496 +589,293 @@
         </div>
     </div>
 
-    <!-- ✅ 후원 모달 -->
-    <div id="supportModalBackdrop" class="support-modal-backdrop" onclick="backdropClick(event)">
-        <div class="support-modal" role="dialog" aria-modal="true" aria-labelledby="supportModalTitle">
-            <div class="support-modal-header">
-                <div id="supportModalTitle" class="support-modal-title">
-                    🙏 서비스 후원하기 🙏
-                </div>
-                <button class="support-modal-close" type="button" aria-label="닫기" onclick="closeSupportModal()">
-                    ✕
-                </button>
-            </div>
-            <div class="support-modal-body">
-                <p><strong>이 도구가 업무에 도움 되었다면</strong></p>
-                <p>커피 한 잔 값으로 서비스를 응원 해주세요.☕</p>
-
-                <div class="support-qr-wrapper">
-                    <!-- 여기 src 경로를 실제 QR 이미지 파일 경로로 맞춰주세요 -->
-                    <img src="kakaopay-qr.png" alt="카카오페이 후원 QR 코드" />
-                </div>
-
-                <div class="support-modal-hint">
-                    ① QR 코드를 인식하면<br />
-                    ② 카카오페이 송금 화면으로 이동해요.
-                </div>
-                <div class="support-modal-hint">
-                    서비스 유지에 도움 주셔서 감사드립니다.🙇‍♀️
-                </div>
-            </div>
-            <div class="support-modal-footer">
-                <button type="button" class="btn-secondary" onclick="closeSupportModal()">다음에 할게요</button>
-            </div>
-        </div>
-    </div>
-
     <!-- JS -->
     <script>
-        function parseInput(id) {
-            var v = document.getElementById(id).value;
-            return v === "" ? NaN : Number(v);
-        }
+        'use strict';
 
-        // 표준정규분포 CDF 근사
-        function normCdf(x) {
-            var a1 = 0.319381530;
-            var a2 = -0.356563782;
-            var a3 = 1.781477937;
-            var a4 = -1.821255978;
-            var a5 = 1.330274429;
-            var p = 0.2316419;
+        // Bound both runtime and floating-point error; counts and their sums stay exact.
+        var MAX_VISITORS = 1000000000;
+        var INPUT_IDS = ['aVisitors', 'aConversions', 'bVisitors', 'bConversions'];
+        var BASIC_HELP = '<p class="muted">전환율, 절대 차이(pp), 관측 상대 상승률을 보여줍니다.</p>';
+        var TEST_HELP = '<p class="muted">양측 두 비율 z-test를 사용하며, 기대 빈도가 5 미만인 셀이 있으면 Fisher 정확검정을 사용합니다.</p>';
+        var BAYES_HELP = '<p class="muted">독립적인 Beta(1,1) 사전분포를 사용합니다. 데이터와 이 모형을 조건으로 B의 실제 전환율이 A보다 높을 사후확률 및 각 안의 95% 사후구간을 보여줍니다.</p>';
 
-            var sign = x < 0 ? -1 : 1;
-            x = Math.abs(x);
-            var t = 1.0 / (1.0 + p * x);
-            var y =
-                1.0 -
-                (((((a5 * t + a4) * t + a3) * t + a2) * t + a1) *
-                    t *
-                    Math.exp(-x * x / 2.0));
-            return 0.5 * (1.0 + sign * y);
-        }
+        function clampProbability(x) { return Math.max(0, Math.min(1, x)); }
 
-        function betaMean(a, b) {
-            return a / (a + b);
-        }
-
-        function betaVar(a, b) {
-            var denom = (a + b) * (a + b) * (a + b + 1);
-            return (a * b) / denom;
-        }
-
-        // Normal(0,1) 샘플러 (Box-Muller)
-        var _normalSpare = null;
-        function normalSample() {
-            if (_normalSpare !== null) {
-                var v = _normalSpare;
-                _normalSpare = null;
-                return v;
+        // Two-sided standard-normal tail, Q(1/2, z²/2). No subtraction of a tiny tail from 1.
+        function normalTwoSided(z) {
+            var x = z * z / 2;
+            if (x === 0) return 1;
+            if (!Number.isFinite(x)) return 0;
+            var factor = -x + 0.5 * Math.log(x) - 0.5 * Math.log(Math.PI);
+            if (x < 1.5) {
+                var term = 2, sum = term, ap = 0.5;
+                for (var i = 1; i <= 1000; i++) {
+                    ap++; term *= x / ap; sum += term;
+                    if (Math.abs(term) < Math.abs(sum) * 1e-15) return clampProbability(-Math.expm1(factor + Math.log(sum)));
+                }
+            } else {
+                var b = x + 0.5, c = 1e300, d = 1 / b, h = d;
+                for (var j = 1; j <= 1000; j++) {
+                    var an = -j * (j - 0.5);
+                    b += 2; d = an * d + b; if (Math.abs(d) < 1e-300) d = 1e-300;
+                    c = b + an / c; if (Math.abs(c) < 1e-300) c = 1e-300;
+                    d = 1 / d; var delta = d * c; h *= delta;
+                    if (Math.abs(delta - 1) < 1e-15) return clampProbability(Math.exp(factor) * h);
+                }
             }
-            var u, v, s;
-            do {
-                u = Math.random() * 2 - 1;
-                v = Math.random() * 2 - 1;
-                s = u * u + v * v;
-            } while (s === 0 || s >= 1);
-            var mul = Math.sqrt(-2 * Math.log(s) / s);
-            _normalSpare = v * mul;
-            return u * mul;
+            throw new Error('정규분포 계산이 수렴하지 않았습니다.');
         }
 
-        // Gamma(k, 1) 샘플러
-        function gammaSample(k) {
-            if (k <= 0) return NaN;
-            if (k < 1) {
-                var u = Math.random();
-                return gammaSample(1 + k) * Math.pow(u, 1 / k);
-            }
-            var d = k - 1 / 3;
-            var c = 1 / Math.sqrt(9 * d);
-            while (true) {
-                var x = normalSample();
-                var v = 1 + c * x;
-                if (v <= 0) continue;
-                v = v * v * v;
-                var u = Math.random();
-                if (u < 1 - 0.0331 * (x * x) * (x * x)) return d * v;
-                if (Math.log(u) < 0.5 * x * x + d * (1 - v + Math.log(v))) return d * v;
-            }
+        function normCdf(z) {
+            var tail = normalTwoSided(z) / 2;
+            return z < 0 ? tail : 1 - tail;
         }
 
-        // Beta(a, b) 샘플러
-        function betaSample(a, b) {
-            var x = gammaSample(a);
-            var y = gammaSample(b);
-            return x / (x + y);
+        function stirlingCorrection(x) {
+            var t = 1 / x, t2 = t * t;
+            return t * (1 / 12 - t2 * (1 / 360 - t2 * (1 / 1260 - t2 * (1 / 1680 - t2 / 1188))));
         }
 
-        // Monte Carlo 기반 P(B > A)
-        function bayesProbBetterMC(aConv, aVisit, bConv, bVisit, iter = 25000) {
-            var win = 0;
-            for (var i = 0; i < iter; i++) {
-                var pA = betaSample(1 + aConv, 1 + aVisit - aConv);
-                var pB = betaSample(1 + bConv, 1 + bVisit - bConv);
-                if (pB > pA) win++;
+        // Stable log B(a,b), including strongly unbalanced and large parameters.
+        function logBeta(a, b) {
+            var shift = 0;
+            while (a < 12) { shift += Math.log1p(b / a); a++; }
+            while (b < 12) { shift += Math.log1p(a / b); b++; }
+            var s = a + b;
+            var la = a > b ? Math.log1p(-b / s) : Math.log(a / s);
+            var lb = b > a ? Math.log1p(-a / s) : Math.log(b / s);
+            return shift + 0.5 * Math.log(2 * Math.PI / s) + (a - 0.5) * la + (b - 0.5) * lb +
+                stirlingCorrection(a) + stirlingCorrection(b) - stirlingCorrection(s);
+        }
+
+        function betaFraction(a, b, x) {
+            var qab = a + b, qap = a + 1, qam = a - 1;
+            var c = 1, d = 1 - qab * x / qap;
+            if (Math.abs(d) < 1e-300) d = 1e-300;
+            d = 1 / d; var h = d;
+            for (var m = 1; m <= 10000; m++) {
+                var m2 = 2 * m, aa = m * (b - m) * x / ((qam + m2) * (a + m2));
+                d = 1 + aa * d; if (Math.abs(d) < 1e-300) d = 1e-300;
+                c = 1 + aa / c; if (Math.abs(c) < 1e-300) c = 1e-300;
+                d = 1 / d; h *= d * c;
+                aa = -(a + m) * (qab + m) * x / ((a + m2) * (qap + m2));
+                d = 1 + aa * d; if (Math.abs(d) < 1e-300) d = 1e-300;
+                c = 1 + aa / c; if (Math.abs(c) < 1e-300) c = 1e-300;
+                d = 1 / d; var delta = d * c; h *= delta;
+                if (Math.abs(delta - 1) < 1e-13) return h;
             }
-            return win / iter;
+            throw new Error('Beta 분포 계산이 수렴하지 않았습니다.');
+        }
+
+        // Regularized incomplete beta via continued fraction (NIST DLMF 8.17).
+        function betaCdf(x, a, b) {
+            if (x <= 0) return 0;
+            if (x >= 1) return 1;
+            if (a === 1) return -Math.expm1(b * Math.log1p(-x));
+            if (b === 1) return Math.exp(a * Math.log(x));
+            var front = Math.exp(a * Math.log(x) + b * Math.log1p(-x) - logBeta(a, b));
+            return clampProbability(x < (a + 1) / (a + b + 2) ? front * betaFraction(a, b, x) / a :
+                1 - front * betaFraction(b, a, 1 - x) / b);
+        }
+
+        function betaQuantile(q, a, b) {
+            if (q <= 0) return 0;
+            if (q >= 1) return 1;
+            if (a === 1) return -Math.expm1(Math.log1p(-q) / b);
+            if (b === 1) return Math.exp(Math.log(q) / a);
+            // Reflect distributions concentrated near 1 to preserve precision.
+            if (a > b) return 1 - betaQuantile(1 - q, b, a);
+            var lo = 0, hi = 1;
+            for (var i = 0; i < 64; i++) {
+                var mid = (lo + hi) / 2;
+                if (mid === lo || mid === hi) break;
+                if (betaCdf(mid, a, b) < q) lo = mid; else hi = mid;
+            }
+            return (lo + hi) / 2;
+        }
+
+        function adaptiveSimpson(f, lo, hi, tolerance, depth) {
+            var mid = (lo + hi) / 2, fa = f(lo), fm = f(mid), fb = f(hi);
+            function refine(a, b, va, vm, vb, whole, eps, left) {
+                var center = (a + b) / 2, vl = f((a + center) / 2), vr = f((center + b) / 2);
+                var sl = (center - a) * (va + 4 * vl + vm) / 6;
+                var sr = (b - center) * (vm + 4 * vr + vb) / 6;
+                var delta = sl + sr - whole;
+                if (Math.abs(delta) <= 15 * eps) return sl + sr + delta / 15;
+                if (left === 0) {
+                    if (Math.abs(delta) > 1e-6) throw new Error('사후확률 적분이 수렴하지 않았습니다.');
+                    return sl + sr;
+                }
+                return refine(a, center, va, vl, vm, sl, eps / 2, left - 1) +
+                    refine(center, b, vm, vr, vb, sr, eps / 2, left - 1);
+            }
+            return refine(lo, hi, fa, fm, fb, (hi - lo) * (fa + 4 * fm + fb) / 6, tolerance, depth);
+        }
+
+        function bayesProbability(aA, bA, aB, bB) {
+            if (aA === aB && bA === bB) return 0.5;
+            // Analytic identities for boundary posteriors avoid endpoint cancellation.
+            if (aA === 1) return clampProbability(-Math.expm1(logBeta(aB, bB + bA) - logBeta(aB, bB)));
+            if (bA === 1) return clampProbability(Math.exp(logBeta(aB + aA, bB) - logBeta(aB, bB)));
+            if (aB === 1 || bB === 1) return 1 - bayesProbability(aB, bB, aA, bA);
+            // Canonical ordering ensures exact A/B complementarity in numerical integration.
+            if (aA > aB || (aA === aB && bA > bB)) return 1 - bayesProbability(aB, bB, aA, bA);
+            // Integrate over posterior quantiles, so narrow distributions cannot be skipped.
+            var edge = 1e-9;
+            var integral = adaptiveSimpson(function(u) {
+                return betaCdf(betaQuantile(u, aB, bB), aA, bA);
+            }, edge, 1 - edge, 2e-7, 22);
+            return clampProbability(integral + edge); // omitted tails bounded by 2e-9
+        }
+
+        function logChoose(n, k) {
+            if (k < 0 || k > n) return -Infinity;
+            return -Math.log(n + 1) - logBeta(k + 1, n - k + 1);
+        }
+
+        // Probability-ordered, two-sided Fisher test. Normalize weights around the mode.
+        function fisherExact(nA, xA, nB, xB) {
+            var N = nA + nB, K = xA + xB, n = nA;
+            var lo = Math.max(0, n - (N - K)), hi = Math.min(n, K);
+            if (lo === hi) return 1;
+            var mode = Math.max(lo, Math.min(hi, Math.floor((n + 1) * (K + 1) / (N + 2))));
+            function logP(k) { return logChoose(K, k) + logChoose(N - K, n - k) - logChoose(N, n); }
+            var threshold = logP(xA) - logP(mode) + 1e-8;
+            var total = 1, extreme = threshold >= 0 ? 1 : 0;
+            [-1, 1].forEach(function(direction) {
+                var k = mode, logWeight = 0;
+                for (var steps = 0; steps < 200000; steps++) {
+                    if ((direction < 0 && k === lo) || (direction > 0 && k === hi)) return;
+                    var ratio = direction > 0 ? (K - k) / (k + 1) * (n - k) / (N - K - n + k + 1) :
+                        k / (K - k + 1) * (N - K - n + k) / (n - k + 1);
+                    logWeight += Math.log(ratio); k += direction;
+                    var weight = Math.exp(logWeight);
+                    total += weight;
+                    if (logWeight <= threshold) extreme += weight;
+                    // Geometric bound on remaining mass, not merely the current term.
+                    if (ratio < 1 && weight / (1 - ratio) < total * 1e-15) return;
+                }
+                throw new Error('정확검정 계산 범위를 초과했습니다.');
+            });
+            return clampProbability(extreme / total);
+        }
+
+        function frequentist(nA, xA, nB, xB) {
+            var p = (xA + xB) / (nA + nB);
+            var expected = [nA * p, nA * (1 - p), nB * p, nB * (1 - p)];
+            if (Math.min.apply(null, expected) < 5) return {method:'Fisher 정확검정', pValue:fisherExact(nA,xA,nB,xB), z:null, sparse:true};
+            var se = Math.sqrt(p * (1 - p) * (1 / nA + 1 / nB));
+            var z = (xB / nB - xA / nA) / se;
+            return {method:'두 비율 z-test', pValue:normalTwoSided(z), z:z, sparse:false};
+        }
+
+        function analyze(nA, xA, nB, xB) {
+            if (![nA,xA,nB,xB].every(Number.isSafeInteger) || nA <= 0 || nB <= 0 ||
+                xA < 0 || xB < 0 || xA > nA || xB > nB || nA > MAX_VISITORS || nB > MAX_VISITORS) {
+                throw new Error('지원 범위를 벗어난 입력입니다.');
+            }
+            var aA = xA + 1, bA = nA - xA + 1, aB = xB + 1, bB = nB - xB + 1;
+            return {pA:xA/nA, pB:xB/nB, diff:xB/nB-xA/nA,
+                lift:xA === 0 ? null : (xB/nB/(xA/nA)-1)*100,
+                test:frequentist(nA,xA,nB,xB), probability:bayesProbability(aA,bA,aB,bB),
+                intervalA:[betaQuantile(0.025,aA,bA),betaQuantile(0.975,aA,bA)],
+                intervalB:[betaQuantile(0.025,aB,bB),betaQuantile(0.975,aB,bB)],
+                posteriorMeanLift:((aB/(aB+bB))/(aA/(aA+bA))-1)*100};
+        }
+
+        function formatNumber(value) {
+            if (value === 0) return '0.00';
+            if (Math.abs(value) < 0.000001) return value.toExponential(3);
+            var digits = Math.abs(value) < 0.01 ? 6 : Math.abs(value) < 1 ? 4 : 2;
+            return value.toFixed(digits);
+        }
+        function percent(p) {
+            if (p > 0.9999 && p < 1) return (p * 100).toFixed(10) + '%';
+            return formatNumber(p * 100) + '%';
+        }
+        function probabilityText(p) {
+            if (p < 0.0005) return '&lt;0.05%';
+            if (p > 0.9995) return '&gt;99.95%';
+            return (p * 100).toFixed(1) + '%';
+        }
+        function metric(label, value) {
+            return '<p><span class="result-label">' + label + '</span> · <span class="result-value">' + value + '</span></p>';
+        }
+
+        function resetResults() {
+            document.getElementById('error').textContent = '';
+            document.getElementById('basicResult').innerHTML = BASIC_HELP;
+            document.getElementById('ztestResult').innerHTML = TEST_HELP;
+            document.getElementById('bayesResult').innerHTML = BAYES_HELP;
+            document.getElementById('resultCard').className = 'card result-neutral';
+            var summary = document.getElementById('summary');
+            summary.className = 'summary-box summary-default';
+            summary.innerHTML = '<p class="summary-title">요약 결과</p><p>방문자 수와 전환 수를 입력하면 분석 결과가 표시됩니다.</p>';
+        }
+
+        function showError(message) {
+            resetResults();
+            document.getElementById('error').textContent = message;
+            document.getElementById('summary').innerHTML = '<p class="summary-title">입력 또는 계산을 확인해주세요</p><p>' + message + '</p>';
         }
 
         function calculate() {
-            var aVisitors = parseInput("aVisitors");
-            var aConversions = parseInput("aConversions");
-            var bVisitors = parseInput("bVisitors");
-            var bConversions = parseInput("bConversions");
-
-            var errorEl = document.getElementById("error");
-            var summaryEl = document.getElementById("summary");
-            var basicEl = document.getElementById("basicResult");
-            var zEl = document.getElementById("ztestResult");
-            var bayesEl = document.getElementById("bayesResult");
-            var resultCard = document.getElementById("resultCard");
-
-            errorEl.textContent = "";
-            basicEl.innerHTML = "";
-            zEl.innerHTML = "";
-            bayesEl.innerHTML = "";
-
-            var alpha = 0.05;
-            var confidence = 95;
-
-            if (resultCard) {
-                resultCard.className = "card result-neutral";
-            }
-
-            if (
-                isNaN(aVisitors) || isNaN(aConversions) ||
-                isNaN(bVisitors) || isNaN(bConversions)
-            ) {
-                errorEl.textContent = "모든 입력값을 숫자로 입력해주세요.";
-                summaryEl.className = "summary-box summary-default";
-                summaryEl.innerHTML =
-                    "<p class='summary-title'>입력이 부족합니다</p>" +
-                    "<p>Control A와 Variation B의 방문자 수 / 전환 수를 모두 입력한 뒤 다시 시도해주세요.</p>";
-                return;
-            }
-
-            if (aVisitors <= 0 || bVisitors <= 0) {
-                errorEl.textContent = "방문자 수는 0보다 커야 합니다.";
-                summaryEl.className = "summary-box summary-default";
-                summaryEl.innerHTML =
-                    "<p class='summary-title'>데이터 오류</p>" +
-                    "<p>방문자 수는 0보다 커야 합니다. 입력 데이터를 다시 확인해주세요.</p>";
-
-
-                return;
-            }
-
-            if (aConversions < 0 || bConversions < 0) {
-                errorEl.textContent = "전환 수는 0 이상이어야 합니다.";
-                summaryEl.className = "summary-box summary-default";
-                summaryEl.innerHTML =
-                    "<p class='summary-title'>데이터 오류</p>" +
-                    "<p>전환 수는 0 이상이어야 합니다. 입력 데이터를 다시 확인해주세요.</p>";
-                return;
-            }
-
-            if (aConversions > aVisitors || bConversions > bVisitors) {
-                errorEl.textContent = "전환 수는 방문자 수를 초과할 수 없습니다.";
-                summaryEl.className = "summary-box summary-default";
-                summaryEl.innerHTML =
-                    "<p class='summary-title'>데이터 모순</p>" +
-                    "<p>전환 수가 방문자 수를 초과할 수 없습니다. 입력 데이터를 다시 확인해주세요.</p>";
-                return;
-            }
-
-            var p1 = aConversions / aVisitors;
-            var p2 = bConversions / bVisitors;
-
-            var sampleWarn = false;
-            var sampleMsg = "";
-
-            if (aVisitors < 1000 || bVisitors < 1000) {
-                sampleWarn = true;
-                sampleMsg += "방문자 수가 1,000명 미만이라 결과 변동성이 큽니다. ";
-            }
-
-            if (aConversions < 30 || bConversions < 30) {
-                sampleWarn = true;
-                sampleMsg += "전환 수가 30건 미만이라 통계적 신뢰도가 낮습니다.";
-            }
-
-            var diff = p2 - p1;
-            var rateDiff = Math.abs(diff);
-            var treatAsSame = rateDiff < 1e-6;
-            var direction = diff > 0 ? "B" : diff < 0 ? "A" : "none";
-
-            var relLift = p1 > 0 ? ((p2 / p1 - 1) * 100) : NaN;
-            var absDiff = diff * 100;
-
-            var basicHtml = "";
-            basicHtml += "<p><span class='result-label'>A안 전환율</span> · <span class='result-value'>" + (p1 * 100).toFixed(2) + "%</span></p>";
-            basicHtml += "<p><span class='result-label'>B안 전환율</span> · <span class='result-value'>" + (p2 * 100).toFixed(2) + "%</span></p>";
-            basicHtml += "<p><span class='result-label'>전환율 차이 (B - A)</span> · <span class='result-value'>" + absDiff.toFixed(2) + "pp</span></p>";
-            basicHtml += "<p><span class='result-label'>상대 상승률 (B / A - 1)</span> · <span class='result-value'>" +
-                (isFinite(relLift) ? relLift.toFixed(2) + "%" : "-") + "</span></p>";
-            basicEl.innerHTML = basicHtml;
-
-            var pooled = (aConversions + bConversions) / (aVisitors + bVisitors);
-            var qPooled = 1 - pooled;
-            var se = Math.sqrt(pooled * qPooled * (1 / aVisitors + 1 / bVisitors));
-
-            var z = NaN;
-            var pValue = NaN;
-            var isSignificant = false;
-
-            var zHtml = "";
-            if (se === 0 || !isFinite(se)) {
-                zHtml += "<p style='color:#f97373;'>표준오차가 0이 되어 z-test를 계산할 수 없습니다. 샘플 수가 너무 적거나, 두 안의 전환율이 완전히 동일한 경우일 수 있습니다.</p>";
-            } else {
-                z = (p2 - p1) / se;
-                pValue = 2 * (1 - normCdf(Math.abs(z)));
-                if (!isFinite(pValue)) {
-                    pValue = NaN;
+            var raw = INPUT_IDS.map(function(id) { return document.getElementById(id).value.trim(); });
+            if (raw.some(function(v) { return v === ''; })) { showError('방문자 수와 전환 수를 모두 입력해주세요.'); return; }
+            var values = raw.map(Number);
+            if (!values.every(Number.isSafeInteger)) { showError('모든 값은 유한한 정수로 입력해주세요. 소수나 안전한 정수 범위를 넘는 값은 사용할 수 없습니다.'); return; }
+            var nA = values[0], xA = values[1], nB = values[2], xB = values[3];
+            if (nA <= 0 || nB <= 0) { showError('방문자 수는 0보다 커야 합니다.'); return; }
+            if (xA < 0 || xB < 0) { showError('전환 수는 0 이상이어야 합니다.'); return; }
+            if (xA > nA || xB > nB) { showError('전환 수는 방문자 수를 초과할 수 없습니다.'); return; }
+            if (nA > MAX_VISITORS || nB > MAX_VISITORS) { showError('방문자 수는 각 안당 최대 1,000,000,000명까지 지원합니다.'); return; }
+            try {
+                var r = analyze(nA,xA,nB,xB);
+                resetResults();
+                document.getElementById('basicResult').innerHTML = metric('A안 전환율',percent(r.pA)) + metric('B안 전환율',percent(r.pB)) +
+                    metric('전환율 차이 (B − A)',formatNumber(r.diff*100)+'pp') + metric('관측 상대 상승률 (B / A − 1)',r.lift === null ? '계산 불가 (A 전환율 0%)' : formatNumber(r.lift)+'%');
+                var pText = r.test.pValue < 0.0001 ? '&lt;0.0001' : r.test.pValue.toFixed(6);
+                var significant = r.test.pValue < 0.05;
+                document.getElementById('ztestResult').innerHTML = metric('검정 방법',r.test.method) + metric('p-value (양측)',pText) +
+                    (r.test.z === null ? '' : metric('z-score',r.test.z.toFixed(4))) +
+                    '<p>' + (significant ? '5% 유의수준에서 전환율 차이가 통계적으로 유의합니다.' : '5% 유의수준에서 전환율 차이를 확인할 근거가 충분하지 않습니다. 이는 두 안의 동등함을 입증한 결과가 아닙니다.') + '</p>' +
+                    '<p class="result-note">p-value는 두 안의 실제 전환율이 같다는 가정 아래, 관측 결과 이상으로 극단적인 결과가 나올 확률입니다.</p>' +
+                    (r.test.sparse ? '<p class="result-note">기대 빈도 5 미만인 셀이 있어 정규근사 대신 Fisher 정확검정을 적용했습니다.</p>' : '');
+                document.getElementById('bayesResult').innerHTML = metric('A안 95% 사후구간',percent(r.intervalA[0])+' ~ '+percent(r.intervalA[1])) +
+                    metric('B안 95% 사후구간',percent(r.intervalB[0])+' ~ '+percent(r.intervalB[1])) +
+                    metric('B의 실제 전환율이 A보다 높을 사후확률',probabilityText(r.probability)) +
+                    metric('사후평균 전환율의 상대 차이',formatNumber(r.posteriorMeanLift)+'%') +
+                    '<p class="result-note">독립적인 Beta(1,1) 사전분포를 사용한 모형의 결과입니다. 구간은 Beta 분포의 2.5%·97.5% 분위수입니다. 사후평균의 상대 차이는 상대 상승률 자체의 기대값이나 다음 실험의 예측값이 아닙니다.</p>';
+                var state = 'warn', title, detail;
+                if (significant && r.diff > 0) {
+                    state = 'good'; title = 'B안의 전환율이 통계적으로 유의하게 높습니다. ✅';
+                    detail = '관측 전환율 차이는 +' + formatNumber(r.diff*100) + 'pp입니다. 실제 채택 여부는 효과의 크기와 운영 비용을 함께 고려하세요.';
+                } else if (significant && r.diff < 0) {
+                    state = 'bad'; title = 'A안의 전환율이 통계적으로 유의하게 높습니다. 🔴';
+                    detail = 'B안의 관측 전환율은 A안보다 ' + formatNumber(-r.diff*100) + 'pp 낮습니다. 현재 결과에서는 A안 유지가 유리합니다.';
                 } else {
-                    pValue = Math.max(0, Math.min(1, pValue));
+                    title = '아직 어느 안이 우세한지 판단하기 어렵습니다. 🟡';
+                    detail = (r.diff === 0 ? '관측 전환율은 같습니다. ' : '관측 전환율은 ' + (r.diff > 0 ? 'B' : 'A') + '안이 높지만, ') +
+                        '통계적으로 유의한 차이를 확인하지 못했습니다. 동등한 성과라고 단정할 수는 없습니다.';
                 }
-                isSignificant = isFinite(pValue) && pValue < alpha;
-
-                zHtml += "<p><span class='result-label'>p-value (양측)</span> · <span class='result-value'>" +
-                    (isFinite(pValue) ? pValue.toFixed(4) : "-") + "</span></p>";
-                zHtml += "<p><span class='result-label'>z-score</span> · <span class='result-value'>" +
-                    (isFinite(z) ? z.toFixed(3) : "-") + "</span></p>";
-
-                if (isFinite(pValue)) {
-                    if (isSignificant) {
-                        zHtml += "<p>→ 우연히 이런 차이가 나올 확률이 5% 미만이므로, <strong>전환율 차이가 통계적으로 의미 있다</strong>고 볼 수 있습니다. (신뢰수준 " + confidence + "%)</p>";
-                    } else {
-                        zHtml += "<p>→ 현재 데이터 기준으로는, <strong>전환율 차이가 우연일 가능성이 아직 커서</strong> 어느 안이 명확히 더 좋다고 말하기 어렵습니다.</p>";
-                    }
+                var summary = document.getElementById('summary');
+                summary.className = 'summary-box summary-' + state;
+                summary.innerHTML = '<p class="summary-title">' + title + '</p><p>' + detail + '</p><p>베이지안 모형에서 B가 A보다 우세할 사후확률: ' + probabilityText(r.probability) + '.</p>';
+                if ((!significant && (r.probability > 0.95 || r.probability < 0.05)) ||
+                    (significant && ((r.diff > 0 && r.probability < 0.5) || (r.diff < 0 && r.probability > 0.5)))) {
+                    summary.innerHTML += '<p class="result-note">검정과 사후확률은 가정과 질문이 다른 지표입니다. 요약의 유의성 판단은 양측 검정에 따르며, 사후확률은 별도로 해석하세요.</p>';
                 }
-            }
-            zEl.innerHTML = zHtml;
-
-            var aA = 1 + aConversions;
-            var bA = 1 + (aVisitors - aConversions);
-            var aB = 1 + bConversions;
-            var bB = 1 + (bVisitors - bConversions);
-
-            var mA = betaMean(aA, bA);
-            var mB = betaMean(aB, bB);
-            var vA = betaVar(aA, bA);
-            var vB = betaVar(aB, bB);
-            var sdA = Math.sqrt(vA);
-            var sdB = Math.sqrt(vB);
-
-            var bayesHtml = "";
-            var probBetter = NaN;
-            var bayesLift = NaN;
-
-            if (isFinite(vA) && isFinite(vB) && vA > 0 && vB > 0) {
-                var z95 = 1.96;
-                var lowerA = mA - z95 * sdA;
-                var upperA = mA + z95 * sdA;
-                var lowerB = mB - z95 * sdB;
-                var upperB = mB + z95 * sdB;
-
-                var meanDiff = mB - mA;
-
-                probBetter = bayesProbBetterMC(
-                    aConversions,
-                    aVisitors,
-                    bConversions,
-                    bVisitors,
-                    25000
-                );
-
-                if (treatAsSame) {
-                    probBetter = 0.5;
-                }
-
-                bayesLift = (meanDiff / mA) * 100;
-
-                function clip(x) {
-                    return Math.min(Math.max(x, 0), 1);
-                }
-
-                bayesHtml += "<p><span class='result-label'>A안 95% 구간</span> · <span class='result-value'>" +
-                    (clip(lowerA) * 100).toFixed(2) + "% ~ " +
-                    (clip(upperA) * 100).toFixed(2) + "%</span></p>";
-                bayesHtml += "<p><span class='result-label'>B안 95% 구간</span> · <span class='result-value'>" +
-                    (clip(lowerB) * 100).toFixed(2) + "% ~ " +
-                    (clip(upperB) * 100).toFixed(2) + "%</span></p>";
-
-                var probText = isFinite(probBetter) ? (probBetter * 100).toFixed(1) : "-";
-                var upliftText = isFinite(bayesLift) ? bayesLift.toFixed(2) : "-";
-                var upliftLabel;
-
-                if (isFinite(bayesLift)) {
-                    if (bayesLift >= 0) {
-                        upliftLabel = "기대 개선 정도는 ";
-                    } else {
-                        upliftLabel = "기대 하락 정도는 ";
-                    }
-                } else {
-                    upliftLabel = "기대 변화 정도는 ";
-                }
-
-                bayesHtml += "<p style='margin-top:6px;'>→ B안이 A안보다 좋을 확률은 <strong>" +
-                    probText +
-                    "%</strong>이며, " +
-                    upliftLabel +
-                    "<strong>" +
-                    upliftText +
-                    "%</strong>로 예상됩니다.</p>";
-            } else {
-                bayesHtml += "<p style='color:#f97373;'>샘플 수가 너무 적거나, 전환율 분산이 거의 0에 가까워 베이지안 근사를 안정적으로 계산하기 어렵습니다.</p>";
-            }
-            bayesEl.innerHTML = bayesHtml;
-
-            var summaryCls = "summary-box summary-default";
-            var summaryHtml = "";
-            var resultState = "neutral";
-
-            if (rateDiff < 1e-6) {
-                summaryCls = "summary-box summary-default";
-                summaryHtml =
-                    "<p class='summary-title'>두 안의 전환율이 거의 동일합니다. ⚪</p>" +
-                    "<p>A안과 B안의 전환율이 사실상 같은 수준이어서, 통계적으로도 어느 한쪽이 우세하다고 보기 어렵습니다.</p>" +
-                    "<p>이 경우에는 디자인·브랜드 일관성·운영 편의성·추후 실험 설계 등 다른 기준을 함께 고려해 선택하는 것이 좋습니다.</p>";
-                resultState = "neutral";
-            } else if (!isFinite(pValue) || !isFinite(probBetter)) {
-                summaryHtml =
-                    "<p class='summary-title'>아직 결론을 내리기 어렵습니다. 🫠</p>" +
-                    "<p>데이터 수가 충분하지 않거나, 두 안의 전환율이 거의 동일해 통계적으로 안정적인 판단이 어렵습니다.</p>" +
-                    "<p>데이터를 더 모은 뒤 다시 테스트 결과를 확인하는 것을 추천합니다.</p>";
-                resultState = "warn";
-            } else {
-                if (isSignificant && direction === "B" && probBetter >= 0.5 && relLift > 0) {
-                    summaryCls = "summary-box summary-good";
-                    summaryHtml =
-                        "<p class='summary-title'>B안 채택을 추천합니다. ✅</p>" +
-                        "<p>B안의 전환율이 A안보다 <strong>" + relLift.toFixed(1) + "% 높고</strong>, 이 차이는 95% 신뢰수준 기준으로 통계적으로 의미 있습니다.</p>" +
-                        "<p>베이지안 관점에서 봐도 B안이 A안보다 좋을 가능성이 매우 높습니다.</p>";
-                    resultState = "good";
-                } else if (isSignificant && direction === "A" && probBetter <= 0.5 && relLift < 0) {
-                    summaryCls = "summary-box summary-bad";
-                    summaryHtml =
-                        "<p class='summary-title'>B안 선택은 위험할 수 있습니다. 🔴</p>" +
-                        "<p>B안의 전환율이 A안보다 낮고, 이 차이는 95% 신뢰수준 기준으로 통계적으로 의미 있습니다.</p>" +
-                        "<p>베이지안 관점에서도 B안이 A안보다 좋을 가능성은 매우 낮게 나타나므로, 현재로서는 A안 유지가 안전합니다.</p>";
-                    resultState = "bad";
-                } else if (!isSignificant && direction === "B" && probBetter >= 0.6) {
-                    summaryCls = "summary-box summary-warn";
-                    summaryHtml =
-                        "<p class='summary-title'>B안이 더 좋아 보이지만, 아직 확실하진 않습니다. 🟡</p>" +
-                        "<p>전환율은 B안이 약간 더 좋아 보이지만, 95% 신뢰수준 기준으로 통계적으로 유의미한 차이는 아닙니다.</p>" +
-                        "<p>B안이 A안보다 좋을 가능성은 대략 " + (probBetter * 100).toFixed(1) +
-                        "% 정도로 추정됩니다. 중요한 의사결정이라면 데이터를 더 모은 뒤 다시 판단하는 것이 좋습니다.</p>";
-                    resultState = "warn";
-                } else if (!isSignificant && direction === "A" && probBetter <= 0.4) {
-                    summaryCls = "summary-box summary-warn";
-                    summaryHtml =
-                        "<p class='summary-title'>A안이 약간 우세해 보이지만, 큰 차이는 아닙니다. 🟡</p>" +
-                        "<p>전환율은 A안이 조금 더 좋아 보이나, 95% 신뢰수준 기준으로 통계적으로 의미 있는 수준은 아닙니다.</p>" +
-                        "<p>현재로서는 A안을 유지하면서, 추가 실험이나 더 큰 임팩트가 기대되는 다른 가설을 테스트해 보는 것이 효율적일 수 있습니다.</p>";
-                    resultState = "warn";
-                } else if (probBetter > 0.4 && probBetter < 0.6) {
-                    summaryCls = "summary-box summary-default";
-                    summaryHtml =
-                        "<p class='summary-title'>두 안의 성과가 거의 비슷합니다. ⚪</p>" +
-                        "<p>A안과 B안의 전환율 차이는 크지 않고, 통계적으로도 어느 한쪽이 명확히 더 좋다고 보기 어렵습니다.</p>" +
-                        "<p>이 경우 디자인·브랜드 일관성·운영 편의성·추후 실험 설계 등 다른 요인을 함께 고려해 선택하는 것이 좋습니다.</p>";
-                    resultState = "neutral";
-                } else {
-                    summaryCls = "summary-box summary-default";
-                    summaryHtml =
-                        "<p class='summary-title'>결과가 한쪽으로 강하게 치우치진 않습니다. ⚪</p>" +
-                        "<p>z-test와 베이지안 결과를 모두 봤을 때, 한 안이 확실히 우세하다고 단정짓기 어려운 상태입니다.</p>" +
-                        "<p>더 큰 임팩트가 기대되는 새로운 실험 가설을 설계하는 것을 추천합니다.</p>";
-                    resultState = "neutral";
-                }
-            }
-
-            if (sampleWarn) {
-                summaryHtml +=
-                    "<p style='margin-top:6px; font-size:12px; color:#fde68a;'>⚠️ " +
-                    sampleMsg.trim() +
-                    "</p>";
-                if (resultState === "neutral") {
-                    resultState = "warn";
-                }
-            }
-
-            summaryEl.className = summaryCls;
-            summaryEl.innerHTML = summaryHtml;
-
-            if (resultCard) {
-                var base = "card";
-                if (resultState === "good") base += " result-good";
-                else if (resultState === "bad") base += " result-bad";
-                else if (resultState === "warn") base += " result-warn";
-                else base += " result-neutral";
-                resultCard.className = base;
+                if (Math.min(xA,nA-xA,xB,nB-xB) < 5) summary.innerHTML += '<p class="result-note">성공 또는 실패 관측이 적습니다. 사후확률은 사전분포의 영향을 받을 수 있으므로 함께 확인하세요.</p>';
+                document.getElementById('resultCard').className = 'card result-' + state;
+            } catch (error) {
+                showError('수치 계산을 안정적으로 완료하지 못했습니다. 입력 규모를 확인해주세요.');
             }
         }
 
         function resetAll() {
-            document.getElementById("aVisitors").value = "";
-            document.getElementById("aConversions").value = "";
-            document.getElementById("bVisitors").value = "";
-            document.getElementById("bConversions").value = "";
-            document.getElementById("error").textContent = "";
-
-            document.getElementById("basicResult").innerHTML =
-                "<p class='muted'>전환율, 차이(percentage point), 상대 상승률을 보여줍니다.</p>";
-            document.getElementById("ztestResult").innerHTML =
-                "<p class='muted'>p-value 기준으로 결과의 차이가 우연일 가능성을 계산해 통계적으로 의미 있는 차이인지 보여줍니다.</p>";
-            document.getElementById("bayesResult").innerHTML =
-                "<p class='muted'>B안이 A안보다 전환율이 높을 가능성을 %로 보여주고, 그때 기대되는 전환율 상승 폭(uplift)을 함께 보여줍니다.<br />예: “B가 더 좋을 확률 80%”라면, 비슷한 실험을 10번 했을 때<br />8번 정도는 B가 더 잘 나올 것이라는 의미입니다.</p>";
-
-            var summaryEl = document.getElementById("summary");
-            summaryEl.className = "summary-box summary-default";
-            summaryEl.innerHTML =
-                "<p class='summary-title'>요약 결과</p>" +
-                "<p>A/B TEST 데이터를 입력하면, 여기에 통계적 관점의 한 줄 결론이 나타납니다.</p>" +
-                "<p style='font-size:12px; color:#9ca3af;'>예: “B안의 전환율이 A안보다 6.5% 높고, 통계적으로 의미 있는 차이입니다. → B안 채택 추천”</p>";
-
-            var resultCard = document.getElementById("resultCard");
-            if (resultCard) {
-                resultCard.className = "card result-neutral";
-            }
-        }
-
-        /* ===== 후원 버튼 핸들링 ===== */
-
-        function isMobileDevice() {
-            return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile/i.test(
-                navigator.userAgent || ""
-            );
-        }
-
-        function handleSupportClick() {
-            var kakaoUrl = "https://qr.kakaopay.com/Ej7ymw0t75dc03903";
-
-            if (isMobileDevice()) {
-                // 모바일: 바로 카카오페이 링크 이동
-                window.location.href = kakaoUrl;
-            } else {
-                // PC: QR 모달 열기
-                openSupportModal();
-            }
-        }
-
-        function openSupportModal() {
-            var backdrop = document.getElementById("supportModalBackdrop");
-            if (!backdrop) return;
-            backdrop.classList.add("is-open");
-            document.body.style.overflow = "hidden";
-        }
-
-        function closeSupportModal() {
-            var backdrop = document.getElementById("supportModalBackdrop");
-            if (!backdrop) return;
-            backdrop.classList.remove("is-open");
-            document.body.style.overflow = "";
-        }
-
-        function backdropClick(event) {
-            // 바깥(검은 배경) 클릭 시만 닫기
-            if (event.target.id === "supportModalBackdrop") {
-                closeSupportModal();
-            }
+            INPUT_IDS.forEach(function(id) { document.getElementById(id).value = ''; });
+            resetResults();
         }
     </script>
 </body>
