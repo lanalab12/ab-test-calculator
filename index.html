@@ -192,7 +192,7 @@
         /* 요약 결과 여백 조정 */
         #summary {
             margin-top: 18px;
-            margin-bottom: 8px;
+            margin-bottom: 18px;
         }
 
         /* 레이아웃 */
@@ -481,6 +481,11 @@
                 </div>
             </div>
 
+            <!-- 요약 결과 -->
+            <div id="summary" class="summary-box summary-default" aria-live="polite">
+                <p class="summary-title">요약 결과</p><p>A/B TEST 데이터를 입력하면, 여기에 통계적 관점의 한 줄 결론이 나타납니다.</p><p class="result-note">예: “B안의 전환율이 A안보다 6.5% 높고, 통계적으로 의미 있는 차이입니다. → B안 채택 추천”</p>
+            </div>
+
             <!-- Layout -->
             <div class="layout">
                 <!-- 입력 카드 -->
@@ -489,8 +494,10 @@
                         <div class="card-title">데이터 입력</div>
                     </div>
                     <p class="muted">
-                        각 안의 방문자 수와 전환한 방문자 수(구매·가입 등)를 입력하세요. 한 방문자의 전환은 최대 1건으로 집계하며, 방문자 수는 각 안당 최대 10억 명까지 지원합니다.
+                        각 안의 방문자 수와 전환 수(구매·가입 등)를 입력하세요. 데이터는 95% 신뢰수준 기준으로 분석됩니다.
                     </p>
+
+                    <p class="hint">전환 수는 전환한 방문자 수로 입력하세요. 한 방문자는 최대 1건으로 집계하며, 방문자 수는 각 안당 최대 10억 명까지 지원합니다.</p>
 
                     <div class="variant-grid">
                         <!-- Control -->
@@ -548,39 +555,30 @@
                     <div class="result-block">
                         <p><strong>1. 기본 지표 요약</strong></p>
                         <div id="basicResult">
-                            <p class="muted">전환율, 절대 차이(pp), 관측 상대 상승률을 보여줍니다.</p>
+                            <p class="muted">전환율, 차이(percentage point), 상대 상승률을 보여줍니다.</p>
                         </div>
                     </div>
 
                     <div class="result-block">
                         <p><strong>2. 통계 검정 결과</strong></p>
                         <div id="ztestResult">
-                            <p class="muted">양측 두 비율 z-test를 사용하며, 기대 빈도가 5 미만인 셀이 있으면 Fisher 정확검정을 사용합니다.</p>
+                            <p class="muted">두 안의 전환율 차이가 통계적으로 의미 있는지 확인해줍니다.</p>
                         </div>
                     </div>
 
                     <div class="result-block">
                         <p><strong>3. 베이지안 관점 결과</strong></p>
                         <div id="bayesResult">
-                            <p class="muted">
-                                독립적인 Beta(1,1) 사전분포를 사용합니다. 데이터와 이 모형을 조건으로 B의 실제 전환율이 A보다 높을 사후확률 및 각 안의 95% 사후구간을 보여줍니다.
-                            </p>
+                            <p class="muted">현재 데이터를 바탕으로, B안이 A안보다 전환율이 높을 가능성을 %로 보여줍니다.<br />예: “B가 더 좋을 확률 80%”라면, 현재 데이터와 분석 모형을 기준으로 B안의 실제 전환율이 A안보다 높을 가능성을 80%로 본다는 의미입니다.</p>
                         </div>
                     </div>
 
                     <div class="result-note">
-                        ※ 서로 독립적인 방문자를 무작위 배정하고, 정해진 표본·기간에 한 번 분석하는 실험을 가정합니다. 반복적인 중간 확인이나 여러 안의 동시 비교에 대한 보정은 포함하지 않습니다. 채택 여부는 효과의 크기와 비즈니스 비용도 함께 고려하세요.
+                        ※ 이 결과는 의사결정 참고용이며, 실제 의사결정은 비즈니스 임팩트·리스크 등 다양한 요소를 함께 고려하는 것이 좋습니다.
                     </div>
                 </div>
             </div>
 
-            <!-- 요약 결과 -->
-            <div id="summary" class="summary-box summary-default" aria-live="polite">
-                <p class="summary-title">요약 결과</p>
-                <p>A/B TEST 데이터를 입력하면, 여기에 통계적 관점의 한 줄 결론이 나타납니다.</p>
-                <p style="font-size:12px; color:#9ca3af;">예: “B안의 전환율이 A안보다 6.5% 높고, 통계적으로 의미 있는 차이입니다. → B안 채택
-                    추천”</p>
-            </div>
         </div>
 
         <!-- Footer -->
@@ -596,9 +594,9 @@
         // Bound both runtime and floating-point error; counts and their sums stay exact.
         var MAX_VISITORS = 1000000000;
         var INPUT_IDS = ['aVisitors', 'aConversions', 'bVisitors', 'bConversions'];
-        var BASIC_HELP = '<p class="muted">전환율, 절대 차이(pp), 관측 상대 상승률을 보여줍니다.</p>';
-        var TEST_HELP = '<p class="muted">양측 두 비율 z-test를 사용하며, 기대 빈도가 5 미만인 셀이 있으면 Fisher 정확검정을 사용합니다.</p>';
-        var BAYES_HELP = '<p class="muted">독립적인 Beta(1,1) 사전분포를 사용합니다. 데이터와 이 모형을 조건으로 B의 실제 전환율이 A보다 높을 사후확률 및 각 안의 95% 사후구간을 보여줍니다.</p>';
+        var BASIC_HELP = '<p class="muted">전환율, 차이(percentage point), 상대 상승률을 보여줍니다.</p>';
+        var TEST_HELP = '<p class="muted">두 안의 전환율 차이가 통계적으로 의미 있는지 확인해줍니다.</p>';
+        var BAYES_HELP = '<p class="muted">현재 데이터를 바탕으로, B안이 A안보다 전환율이 높을 가능성을 %로 보여줍니다.<br />예: “B가 더 좋을 확률 80%”라면, 현재 데이터와 분석 모형을 기준으로 B안의 실제 전환율이 A안보다 높을 가능성을 80%로 본다는 의미입니다.</p>';
 
         function clampProbability(x) { return Math.max(0, Math.min(1, x)); }
 
@@ -803,6 +801,75 @@
             return '<p><span class="result-label">' + label + '</span> · <span class="result-value">' + value + '</span></p>';
         }
 
+        function resultSummary(r, nA, xA, nB, xB) {
+            var significant = r.test.pValue < 0.05;
+            var state = 'warn', title, detail;
+            if (significant && r.diff > 0) {
+                state = 'good'; title = 'B안 채택을 추천합니다. ✅';
+                detail = (r.lift === null ? 'A안에서는 전환이 발생하지 않았고, B안의 전환율은 <strong>' + percent(r.pB) + '</strong>입니다. 두 안의 차이는 <strong>' + formatNumber(r.diff * 100) + 'pp</strong>입니다.' :
+                    'B안의 전환율이 A안보다 <strong>' + formatNumber(r.lift) + '% 높고</strong>,') +
+                    ' 이 차이는 95% 신뢰수준 기준으로 통계적으로 의미 있습니다.</p><p>현재 결과에서는 B안이 유리합니다. 실제 적용 전에는 개선 폭이 운영 비용이나 변경 부담에 비해 충분한지도 함께 확인하세요.';
+            } else if (significant && r.diff < 0) {
+                state = 'bad'; title = 'A안 유지를 추천합니다. 🔴';
+                detail = 'B안의 전환율이 A안보다 <strong>' + formatNumber(-r.lift) + '% 낮고</strong>, 이 차이는 95% 신뢰수준 기준으로 통계적으로 의미 있습니다.</p><p>현재로서는 A안을 유지하는 편이 유리합니다. B안을 개선한 뒤 다시 테스트하는 것을 추천합니다.';
+            } else if (xA === 0 && xB === 0) {
+                state = 'default'; title = '아직 두 안 모두 전환이 발생하지 않았습니다. ⚪';
+                detail = '현재 데이터만으로 어느 안의 전환율이 더 높은지 판단하기 어렵습니다. 전환이 더 관측된 뒤 결과를 다시 확인해보세요.';
+            } else if (xA === nA && xB === nB) {
+                state = 'default'; title = '현재 두 안 모두 전환율이 100%입니다. ⚪';
+                detail = '현재 데이터에서는 두 안 모두 모든 방문자가 전환했습니다. 관측된 차이는 없지만, 실제 전환율까지 같다고 단정할 수는 없습니다.';
+            } else if (r.diff === 0) {
+                state = 'default'; title = '현재 관측된 전환율은 같습니다. ⚪';
+                detail = '입력한 데이터에서는 A안과 B안의 전환율이 같습니다. 다만, 이 결과만으로 두 안의 실제 성과까지 같다고 단정할 수는 없습니다.</p><p>방문자 수가 다르면 결과의 불확실성도 다르므로, 아래의 구간과 확률을 함께 확인해주세요.';
+            } else if (r.diff > 0 && r.probability >= 0.6) {
+                title = 'B안이 더 좋아 보이지만, 아직 확실하진 않습니다. 🟡';
+                detail = '전환율은 B안이 높지만, 현재 데이터만으로는 통계적으로 의미 있는 차이라고 말하기 어렵습니다.</p><p>B안이 A안보다 좋을 가능성은 <strong>' + probabilityText(r.probability) + '</strong>로 추정됩니다. 중요한 의사결정이라면 데이터를 더 모은 뒤 다시 판단하는 것이 좋습니다.';
+            } else if (r.diff < 0 && r.probability <= 0.4) {
+                title = 'A안이 더 좋아 보이지만, 아직 확실하진 않습니다. 🟡';
+                detail = '전환율은 A안이 높지만, 현재 데이터만으로는 통계적으로 의미 있는 차이라고 말하기 어렵습니다.</p><p>바로 B안으로 바꾸기보다는 A안을 유지하면서 데이터를 더 모아보는 것이 좋습니다.';
+            } else {
+                state = 'default'; title = '아직 어느 안이 더 좋은지 판단하기 어렵습니다. ⚪';
+                detail = '현재 결과에서는 어느 한쪽이 명확히 더 좋다고 말하기 어렵습니다. 그렇다고 두 안의 성과가 같다고 확인된 것은 아닙니다.</p><p>차이를 확인하는 것이 중요하다면 데이터를 더 모아보세요. 지금 선택해야 한다면 디자인·브랜드 일관성·운영 편의성도 함께 고려하는 것이 좋습니다.';
+            }
+            var html = '<p class="summary-title">' + title + '</p><p>' + detail + '</p>' +
+                '<p>현재 데이터와 분석 모형에서 B안이 A안보다 좋을 확률은 <strong>' + probabilityText(r.probability) + '</strong>입니다.</p>';
+            if (!significant && xA === 0 && xB > 0) html += '<p>A안에서는 전환이 발생하지 않았고, B안의 전환율은 ' + percent(r.pB) + '입니다. 두 안의 차이는 ' + formatNumber(r.diff * 100) + 'pp입니다.</p>';
+            if ((!significant && (r.probability > 0.95 || r.probability < 0.05)) ||
+                (significant && ((r.diff > 0 && r.probability < 0.5) || (r.diff < 0 && r.probability > 0.5))) ||
+                (!significant && ((r.diff > 0 && r.probability < 0.4) || (r.diff < 0 && r.probability > 0.6)))) {
+                html += '<p class="result-note"><strong>두 분석 결과가 다르게 느껴질 수 있습니다.</strong> 통계 검정은 “차이가 있다고 판단할 근거가 충분한지”를, 베이지안 분석은 “현재 데이터에서 어느 안이 더 좋을 가능성이 높은지”를 보여줍니다. 따라서 B안이 좋을 가능성이 높게 나와도, 통계적으로 의미 있는 차이는 아직 확인되지 않을 수 있습니다.</p>';
+            }
+            if (significant && Math.abs(r.diff * 100) < 0.01) html += '<p class="result-note">통계적으로 의미 있는 차이는 확인됐습니다. 다만 실제 차이는 ' + formatNumber(Math.abs(r.diff * 100)) + 'pp이므로, 적용할 만큼의 개선인지도 함께 확인하세요.</p>';
+            if (Math.min(xA, nA - xA, xB, nB - xB) < 5) html += '<p class="result-note">⚠️ 전환하거나 전환하지 않은 방문자 수가 적어 결과를 신중하게 볼 필요가 있습니다. 베이지안 확률은 분석에 사용한 사전 가정의 영향을 받을 수 있습니다.</p>';
+            return {state:state, html:html};
+        }
+
+        function renderResults(r, nA, xA, nB, xB) {
+            document.getElementById('basicResult').innerHTML = metric('A안 전환율', percent(r.pA)) + metric('B안 전환율', percent(r.pB)) +
+                metric('전환율 차이 (B − A)', formatNumber(r.diff * 100) + 'pp') +
+                metric('상대 상승률 (B / A − 1)', r.lift === null ? '계산 불가 — 기준인 A안 전환율이 0%입니다.' : formatNumber(r.lift) + '%');
+            var pText = r.test.pValue < 0.0001 ? '&lt;0.0001' : r.test.pValue.toFixed(6);
+            var significant = r.test.pValue < 0.05;
+            // Interpret the test in everyday language without calling p the probability of chance.
+            document.getElementById('ztestResult').innerHTML = metric('검정 방법', r.test.method) + metric('p-value (양측)', pText) +
+                (r.test.z === null ? '' : metric('z-score', r.test.z.toFixed(4))) +
+                '<p>→ ' + (significant ? '현재 데이터에서는 <strong>전환율 차이가 통계적으로 의미 있다</strong>고 볼 수 있습니다. 두 안의 실제 전환율이 같다고 가정했을 때, 이 정도 이상의 차이가 나타날 확률이 5% 미만입니다.' :
+                    '현재 데이터만으로는 <strong>어느 안이 명확히 더 좋다고 말하기 어렵습니다.</strong> 차이가 없는 것으로 확정된 것은 아니므로, 필요하다면 데이터를 더 모아보세요.') + '</p>' +
+                (r.test.sparse ? '<p class="result-note">전환하거나 전환하지 않은 방문자 수가 적어, 작은 표본에 맞는 정확검정으로 분석했습니다.</p>' : '');
+            var change = Math.abs(r.posteriorMeanLift) < 1e-10 ? '각 안의 추정 평균 전환율은 같은 수준으로 나타납니다.' :
+                '각 안의 추정 평균 전환율을 비교하면, B안이 A안보다 약 <strong>' + formatNumber(Math.abs(r.posteriorMeanLift)) + '% ' + (r.posteriorMeanLift > 0 ? '높게' : '낮게') + '</strong> 나타납니다.';
+            document.getElementById('bayesResult').innerHTML = metric('A안 95% 구간', percent(r.intervalA[0]) + ' ~ ' + percent(r.intervalA[1])) +
+                metric('B안 95% 구간', percent(r.intervalB[0]) + ' ~ ' + percent(r.intervalB[1])) +
+                metric('B안이 A안보다 좋을 확률', probabilityText(r.probability)) +
+                '<p>→ 현재 데이터와 분석 모형을 기준으로, <strong>B안의 실제 전환율이 A안보다 높을 가능성은 ' + probabilityText(r.probability) + '</strong>입니다.</p>' +
+                metric('추정 평균 전환율의 상대 차이', formatNumber(r.posteriorMeanLift) + '%') +
+                '<p>→ ' + change + ' 실제 적용 후에도 같은 폭으로 변한다는 보장은 아닙니다.</p>';
+            var summary = resultSummary(r, nA, xA, nB, xB);
+            document.getElementById('summary').className = 'summary-box summary-' + summary.state;
+            document.getElementById('summary').innerHTML = summary.html;
+            document.getElementById('resultCard').className = 'card result-' + (summary.state === 'default' ? 'neutral' : summary.state);
+        }
+
         function resetResults() {
             document.getElementById('error').textContent = '';
             document.getElementById('basicResult').innerHTML = BASIC_HELP;
@@ -811,7 +878,7 @@
             document.getElementById('resultCard').className = 'card result-neutral';
             var summary = document.getElementById('summary');
             summary.className = 'summary-box summary-default';
-            summary.innerHTML = '<p class="summary-title">요약 결과</p><p>방문자 수와 전환 수를 입력하면 분석 결과가 표시됩니다.</p>';
+            summary.innerHTML = '<p class="summary-title">요약 결과</p><p>A/B TEST 데이터를 입력하면, 여기에 통계적 관점의 한 줄 결론이 나타납니다.</p><p class="result-note">예: “B안의 전환율이 A안보다 6.5% 높고, 통계적으로 의미 있는 차이입니다. → B안 채택 추천”</p>';
         }
 
         function showError(message) {
@@ -824,52 +891,18 @@
             var raw = INPUT_IDS.map(function(id) { return document.getElementById(id).value.trim(); });
             if (raw.some(function(v) { return v === ''; })) { showError('방문자 수와 전환 수를 모두 입력해주세요.'); return; }
             var values = raw.map(Number);
-            if (!values.every(Number.isSafeInteger)) { showError('모든 값은 유한한 정수로 입력해주세요. 소수나 안전한 정수 범위를 넘는 값은 사용할 수 없습니다.'); return; }
+            if (!values.every(Number.isSafeInteger)) { showError('방문자 수와 전환 수는 정수로 입력해주세요. 안전한 정수 범위를 넘는 값은 사용할 수 없습니다.'); return; }
             var nA = values[0], xA = values[1], nB = values[2], xB = values[3];
             if (nA <= 0 || nB <= 0) { showError('방문자 수는 0보다 커야 합니다.'); return; }
             if (xA < 0 || xB < 0) { showError('전환 수는 0 이상이어야 합니다.'); return; }
             if (xA > nA || xB > nB) { showError('전환 수는 방문자 수를 초과할 수 없습니다.'); return; }
-            if (nA > MAX_VISITORS || nB > MAX_VISITORS) { showError('방문자 수는 각 안당 최대 1,000,000,000명까지 지원합니다.'); return; }
+            if (nA > MAX_VISITORS || nB > MAX_VISITORS) { showError('방문자 수는 각 안당 최대 10억 명까지 입력할 수 있습니다.'); return; }
             try {
                 var r = analyze(nA,xA,nB,xB);
                 resetResults();
-                document.getElementById('basicResult').innerHTML = metric('A안 전환율',percent(r.pA)) + metric('B안 전환율',percent(r.pB)) +
-                    metric('전환율 차이 (B − A)',formatNumber(r.diff*100)+'pp') + metric('관측 상대 상승률 (B / A − 1)',r.lift === null ? '계산 불가 (A 전환율 0%)' : formatNumber(r.lift)+'%');
-                var pText = r.test.pValue < 0.0001 ? '&lt;0.0001' : r.test.pValue.toFixed(6);
-                var significant = r.test.pValue < 0.05;
-                document.getElementById('ztestResult').innerHTML = metric('검정 방법',r.test.method) + metric('p-value (양측)',pText) +
-                    (r.test.z === null ? '' : metric('z-score',r.test.z.toFixed(4))) +
-                    '<p>' + (significant ? '5% 유의수준에서 전환율 차이가 통계적으로 유의합니다.' : '5% 유의수준에서 전환율 차이를 확인할 근거가 충분하지 않습니다. 이는 두 안의 동등함을 입증한 결과가 아닙니다.') + '</p>' +
-                    '<p class="result-note">p-value는 두 안의 실제 전환율이 같다는 가정 아래, 관측 결과 이상으로 극단적인 결과가 나올 확률입니다.</p>' +
-                    (r.test.sparse ? '<p class="result-note">기대 빈도 5 미만인 셀이 있어 정규근사 대신 Fisher 정확검정을 적용했습니다.</p>' : '');
-                document.getElementById('bayesResult').innerHTML = metric('A안 95% 사후구간',percent(r.intervalA[0])+' ~ '+percent(r.intervalA[1])) +
-                    metric('B안 95% 사후구간',percent(r.intervalB[0])+' ~ '+percent(r.intervalB[1])) +
-                    metric('B의 실제 전환율이 A보다 높을 사후확률',probabilityText(r.probability)) +
-                    metric('사후평균 전환율의 상대 차이',formatNumber(r.posteriorMeanLift)+'%') +
-                    '<p class="result-note">독립적인 Beta(1,1) 사전분포를 사용한 모형의 결과입니다. 구간은 Beta 분포의 2.5%·97.5% 분위수입니다. 사후평균의 상대 차이는 상대 상승률 자체의 기대값이나 다음 실험의 예측값이 아닙니다.</p>';
-                var state = 'warn', title, detail;
-                if (significant && r.diff > 0) {
-                    state = 'good'; title = 'B안의 전환율이 통계적으로 유의하게 높습니다. ✅';
-                    detail = '관측 전환율 차이는 +' + formatNumber(r.diff*100) + 'pp입니다. 실제 채택 여부는 효과의 크기와 운영 비용을 함께 고려하세요.';
-                } else if (significant && r.diff < 0) {
-                    state = 'bad'; title = 'A안의 전환율이 통계적으로 유의하게 높습니다. 🔴';
-                    detail = 'B안의 관측 전환율은 A안보다 ' + formatNumber(-r.diff*100) + 'pp 낮습니다. 현재 결과에서는 A안 유지가 유리합니다.';
-                } else {
-                    title = '아직 어느 안이 우세한지 판단하기 어렵습니다. 🟡';
-                    detail = (r.diff === 0 ? '관측 전환율은 같습니다. ' : '관측 전환율은 ' + (r.diff > 0 ? 'B' : 'A') + '안이 높지만, ') +
-                        '통계적으로 유의한 차이를 확인하지 못했습니다. 동등한 성과라고 단정할 수는 없습니다.';
-                }
-                var summary = document.getElementById('summary');
-                summary.className = 'summary-box summary-' + state;
-                summary.innerHTML = '<p class="summary-title">' + title + '</p><p>' + detail + '</p><p>베이지안 모형에서 B가 A보다 우세할 사후확률: ' + probabilityText(r.probability) + '.</p>';
-                if ((!significant && (r.probability > 0.95 || r.probability < 0.05)) ||
-                    (significant && ((r.diff > 0 && r.probability < 0.5) || (r.diff < 0 && r.probability > 0.5)))) {
-                    summary.innerHTML += '<p class="result-note">검정과 사후확률은 가정과 질문이 다른 지표입니다. 요약의 유의성 판단은 양측 검정에 따르며, 사후확률은 별도로 해석하세요.</p>';
-                }
-                if (Math.min(xA,nA-xA,xB,nB-xB) < 5) summary.innerHTML += '<p class="result-note">성공 또는 실패 관측이 적습니다. 사후확률은 사전분포의 영향을 받을 수 있으므로 함께 확인하세요.</p>';
-                document.getElementById('resultCard').className = 'card result-' + state;
+                renderResults(r, nA, xA, nB, xB);
             } catch (error) {
-                showError('수치 계산을 안정적으로 완료하지 못했습니다. 입력 규모를 확인해주세요.');
+                showError('결과를 안정적으로 계산하지 못했습니다. 입력값을 확인한 뒤 다시 시도해주세요.');
             }
         }
 
